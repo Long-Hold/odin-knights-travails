@@ -20,8 +20,19 @@ export function knightMoves(start, end) {
     // Tracks visited spaces so prevent redundant calculations.
     const visitedSquares = new Set();
     visitedSquares.add(startingSquare.position.toString());
+
+    /**
+     * These are the values to add / subtract from (x, y) coordinates from the current Node's position.
+     * They simulate all the potential combinations a Knight can legally move from it's current square.
+     */
+    const moves = [
+        [2, 1], [2, -1], [-2, 1], [-2, -1],
+        [1, 2], [-1, 2], [1, -2], -[-1, -2]
+    ];
+
+    let currentNode = null;
     while (queue.length > 0) {
-        const currentNode = queue.shift();
+        currentNode = queue.shift();
         /**
          * At most, 8 squares can be visited from a single starting point.
          * 
@@ -33,7 +44,32 @@ export function knightMoves(start, end) {
          * If any are out-of-bounds or in visitedSquares, ignore, else add to queue.
          * If coord = end.position, terminate the loop.
          */
+        const [x, y] = currentNode.position;
+        if ([x, y].toString() === endSquare.position.toString()) break;
+        for (const [dx, dy] of moves) {
+            const newX = x + dx;
+            const newY = y + dy;
+
+            if (newX >= 0 && newX <= 7 && newY >= 0 && newY <= 7 && !visitedSquares.has([newX, newY.toString()])) {
+                queue.push(new Node([newX, newY], currentNode));
+                visitedSquares.add([newX, newY].toString());
+            }
+        }
+
+        const bfsQueue = [currentNode];
+        const stepsArr = [];
+        while (bfsQueue.length > 0) {
+            const node = bfsQueue.shift();
+            stepsArr.push(node.position);
+
+            if (node.position.toString() === start.position.toString()) break;
+            if (node.parent) bfsQueue.push(node.parent);
+        }
+
+        return stepsArr;
     }
+
+
 }
 
 /**
@@ -53,3 +89,5 @@ class Node {
         this.parent = parent;
     }
 }
+
+console.log(knightMoves([0,0], [3,3]));
