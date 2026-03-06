@@ -33,6 +33,8 @@ export function knightMoves(start, end) {
     let currentNode = null;
     while (queue.length > 0) {
         currentNode = queue.shift();
+        if (currentNode.position.toString() === endSquare.position.toString()) break;
+        
         /**
          * At most, 8 squares can be visited from a single starting point.
          * 
@@ -45,7 +47,6 @@ export function knightMoves(start, end) {
          * If coord = end.position, terminate the loop.
          */
         const [x, y] = currentNode.position;
-        if ([x, y].toString() === endSquare.position.toString()) break;
         for (const [dx, dy] of moves) {
             const newX = x + dx;
             const newY = y + dy;
@@ -88,5 +89,3 @@ class Node {
         this.parent = parent;
     }
 }
-
-console.log(knightMoves([0,0], [7,7]));
