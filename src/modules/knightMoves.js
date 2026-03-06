@@ -27,6 +27,12 @@ export function knightMoves(start, end) {
         [1, 2], [-1, 2], [1, -2], [-1, -2]
     ];
 
+    /**
+     * This is where the BFS occurs on the grid.
+     * 
+     * We explore the nodes, level by level, exploring all reachable squares from the current node until the end coordinates are
+     * encountered.
+     */
     let currentNode = null;
     while (queue.length > 0) {
         currentNode = queue.shift();
