@@ -7,19 +7,16 @@
  * @returns {[[number, number]]} An array of coordinates that must be visited to arrive to the end.
  */
 export function knightMoves(start, end) {
-    const startingSquare = new Node(start);
-    const endSquare = new Node(end);
-
     /**
      * Stores the nodes that can be legally visited from the current node,
      * as a Node is removed from queue, all of it's valid children will be calculated so on
      * and so forth.
      */
-    const queue = [startingSquare];
+    const queue = [new Node(start)];
 
     // Tracks visited spaces so prevent redundant calculations.
     const visitedSquares = new Set();
-    visitedSquares.add(startingSquare.position.toString());
+    visitedSquares.add(start.toString());
 
     /**
      * These are the values to add / subtract from (x, y) coordinates from the current Node's position.
@@ -33,8 +30,8 @@ export function knightMoves(start, end) {
     let currentNode = null;
     while (queue.length > 0) {
         currentNode = queue.shift();
-        if (currentNode.position.toString() === endSquare.position.toString()) break;
-        
+        if (currentNode.position.toString() === end.toString()) break;
+
         /**
          * At most, 8 squares can be visited from a single starting point.
          * 
@@ -58,14 +55,10 @@ export function knightMoves(start, end) {
         }
     }
 
-    const bfsQueue = [currentNode];
     const stepsArr = [];
-    while (bfsQueue.length > 0) {
-        const node = bfsQueue.shift();
-        stepsArr.push(node.position);
-
-        if (node.position.toString() === startingSquare.position.toString()) break;
-        if (node.parent) bfsQueue.push(node.parent);
+    while (currentNode) {
+      stepsArr.push(currentNode.position);
+      currentNode = currentNode.parent;
     }
 
     return stepsArr.reverse();
@@ -89,3 +82,5 @@ class Node {
         this.parent = parent;
     }
 }
+
+console.log(knightMoves([0,0], [7,7]));
