@@ -27,7 +27,7 @@ export function knightMoves(start, end) {
      */
     const moves = [
         [2, 1], [2, -1], [-2, 1], [-2, -1],
-        [1, 2], [-1, 2], [1, -2], -[-1, -2]
+        [1, 2], [-1, 2], [1, -2], [-1, -2]
     ];
 
     let currentNode = null;
@@ -50,25 +50,24 @@ export function knightMoves(start, end) {
             const newX = x + dx;
             const newY = y + dy;
 
-            if (newX >= 0 && newX <= 7 && newY >= 0 && newY <= 7 && !visitedSquares.has([newX, newY.toString()])) {
+            if (newX >= 0 && newX <= 7 && newY >= 0 && newY <= 7 && !visitedSquares.has([newX, newY].toString())) {
                 queue.push(new Node([newX, newY], currentNode));
                 visitedSquares.add([newX, newY].toString());
             }
         }
-
-        const bfsQueue = [currentNode];
-        const stepsArr = [];
-        while (bfsQueue.length > 0) {
-            const node = bfsQueue.shift();
-            stepsArr.push(node.position);
-
-            if (node.position.toString() === start.position.toString()) break;
-            if (node.parent) bfsQueue.push(node.parent);
-        }
-
-        return stepsArr;
     }
 
+    const bfsQueue = [currentNode];
+    const stepsArr = [];
+    while (bfsQueue.length > 0) {
+        const node = bfsQueue.shift();
+        stepsArr.push(node.position);
+
+        if (node.position.toString() === startingSquare.position.toString()) break;
+        if (node.parent) bfsQueue.push(node.parent);
+    }
+
+    return stepsArr.reverse();
 
 }
 
@@ -90,4 +89,4 @@ class Node {
     }
 }
 
-console.log(knightMoves([0,0], [3,3]));
+console.log(knightMoves([0,0], [7,7]));
